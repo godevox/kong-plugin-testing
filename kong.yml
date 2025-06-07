@@ -1,0 +1,28 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: go-server
+    url: http://go-server:8080
+    plugins:
+      - name: hello-world
+        config:
+          message: "Hello from Kong Custom Plugin!"
+          enabled: true
+      - name: request-logger
+        config:
+          detailed_logging: true
+          log_request_body: false
+          enabled: true
+
+routes:
+  - name: api-route
+    service: go-server
+    paths:
+      - /api
+    strip_path: true
+  - name: users-route
+    service: go-server
+    paths:
+      - /users
+    strip_path: false
