@@ -2,11 +2,22 @@ FROM kong:3.4
 
 USER root
 
-# Install dependencies and oasvalidator
+# Install prerequisites for oasvalidator
 RUN apt-get update && \
-    apt-get install -y git build-essential && \
-    luarocks install oasvalidator && \
+    apt-get install -y \
+        git \
+        build-essential \
+        cmake \
+        liblua5.1-0-dev \
+        pkg-config && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Clone and build oasvalidator from source
+RUN git clone --recurse-submodules https://github.com/nawaz1991/lua-oasvalidator.git /tmp/lua-oasvalidator && \
+    cd /tmp/lua-oasvalidator && \
+    luarocks make && \
+    cd / && \
+    rm -rf /tmp/lua-oasvalidator
 
 USER kong
