@@ -1,0 +1,12 @@
+FROM kong:3.4
+
+USER root
+
+# Install dependencies and oasvalidator
+RUN apt-get update && \
+    apt-get install -y git build-essential && \
+    luarocks install oasvalidator && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+USER kong
